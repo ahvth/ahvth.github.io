@@ -24,10 +24,11 @@
       <pubDate>Sat, 11 Apr 2020 19:15:32 +0800</pubDate>
       
       <guid>https://ahvth.github.io/about/</guid>
-      <description>Written in Go, Hugo is an open source static site generator available under the Apache Licence 2.0. Hugo supports TOML, YAML and JSON data file types, Markdown and HTML content files and uses shortcodes to add rich content. Other notable features are taxonomies, multilingual mode, image processing, custom output formats, HTML/CSS/JS minification and support for Sass SCSS workflows.
-Hugo makes use of a variety of open source projects including:
- https://github.com/yuin/goldmark https://github.com/alecthomas/chroma https://github.com/muesli/smartcrop https://github.com/spf13/cobra https://github.com/spf13/viper  Hugo is ideal for blogs, corporate websites, creative portfolios, online magazines, single page applications or even a website with thousands of pages.
-Hugo is for people who want to hand code their own website without worrying about setting up complicated runtimes, dependencies and databases.</description>
+      <description>👹 Who am I? I am a Free Software enthusiast and IT professional - originally from the USA, living and working in beautiful Budapest, Hungary. Did I mention that I&amp;rsquo;m passionate about Free Software?
+My actual degree is an Associate&amp;rsquo;s in Electronic Communications Technology (basically a radio technician) from Los Angeles Trade Technical College, but most of my work has been in IT, and over the years, that&amp;rsquo;s the area I feel most at home.
+💼 Some places I&amp;rsquo;ve worked&amp;hellip; Broadcast Exchange - Junior Partner
+2010 - 2015
+Family business. In my time working here I managed our brand and marketing assets, built a website with ecommerce integration, and of course managed and listed our inventory of used Audio / Video equipment for sale both on our own site and on eBay.</description>
     </item>
     
     <item>
