@@ -6,7 +6,17 @@
     <description>Recent content in Posts on ahvth.xyz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 08 Nov 2020 19:46:59 +0100</lastBuildDate><atom:link href="https://ahvth.xyz/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 08 Nov 2020 23:29:52 +0100</lastBuildDate><atom:link href="https://ahvth.xyz/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Managing Multiple Git SSH Identities</title>
+      <link>https://ahvth.xyz/post/git-ssh-identities/</link>
+      <pubDate>Sun, 08 Nov 2020 23:29:52 +0100</pubDate>
+      
+      <guid>https://ahvth.xyz/post/git-ssh-identities/</guid>
+      <description>When working with Git in a POSIX / Linux environment (as you should), it&amp;rsquo;s easy to lose track of your SSH keys if you&amp;rsquo;re working with more than just your default identity. This is a pretty common problem when you are working with several Git repos via SSH concurrently and don&amp;rsquo;t have a machine user set up to authenticate with multiple repos using a single key.
+For the lazy ones, or those who like to keep things simple and quick, or perhaps those who don&amp;rsquo;t manage their own repos, I&amp;rsquo;ll share a solution for juggling your Git SSH keys without making any changes on the repo end.</description>
+    </item>
+    
     <item>
       <title>Getting Started with BTRFS Snapshotting</title>
       <link>https://ahvth.xyz/post/f33-btrfs-guide/</link>
