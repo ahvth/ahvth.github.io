@@ -2,36 +2,36 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>ahvth.xyz</title>
-    <link>https://ahvth.github.io/</link>
+    <link>https://ahvth.xyz/</link>
     <description>Recent content on ahvth.xyz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 08 Nov 2020 19:46:59 +0100</lastBuildDate><atom:link href="https://ahvth.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 08 Nov 2020 19:46:59 +0100</lastBuildDate><atom:link href="https://ahvth.xyz/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Getting Started with BTRFS Snapshotting</title>
-      <link>https://ahvth.github.io/post/f33-btrfs-guide/</link>
+      <link>https://ahvth.xyz/post/f33-btrfs-guide/</link>
       <pubDate>Sun, 08 Nov 2020 19:46:59 +0100</pubDate>
       
-      <guid>https://ahvth.github.io/post/f33-btrfs-guide/</guid>
+      <guid>https://ahvth.xyz/post/f33-btrfs-guide/</guid>
       <description>I&amp;rsquo;ve been convinced for a while now that Fedora is the cleanest, most &amp;ldquo;put together&amp;rdquo; of the mainstream Linux distros. With the release of Fedora 33, I was finally persuaded to make the move from Arch Linux to Fedora on my main workstation, in no small part because I really wanted to see what the Fedora team was doing with BTRFS. Call me disappointed when I found out that all they had really done with BTRFS was set it as default and roll a somewhat uninspired subvolume layout, but we&amp;rsquo;ll try to wrap our head around what we can do with the default setup.</description>
     </item>
     
     <item>
       <title>Arch Linux Demystified a.k.a. an Arch Linux Install Reference</title>
-      <link>https://ahvth.github.io/post/arch-installation/</link>
+      <link>https://ahvth.xyz/post/arch-installation/</link>
       <pubDate>Sat, 07 Nov 2020 20:52:34 +0100</pubDate>
       
-      <guid>https://ahvth.github.io/post/arch-installation/</guid>
+      <guid>https://ahvth.xyz/post/arch-installation/</guid>
       <description>This is an iteration on an article I previously posted to medium.com
  There are a lot of resources out there on installing Arch Linux, but when I first started with the subject, I always found it difficult to find that one guide with all of the commands spelled out for me with useful examples. So, haphazardly sprawling out on the page below me shall be a list of commands to create a conservative system layout in mostly chronological order. This should serve as a reference for new Arch users going through their first installations, or for experienced users who just need a quick checklist with some handy optimizations over the official guide.</description>
     </item>
     
     <item>
       <title>About Me</title>
-      <link>https://ahvth.github.io/about/</link>
+      <link>https://ahvth.xyz/about/</link>
       <pubDate>Sat, 11 Apr 2020 19:15:32 +0800</pubDate>
       
-      <guid>https://ahvth.github.io/about/</guid>
+      <guid>https://ahvth.xyz/about/</guid>
       <description>👹 Who am I? I am a Free Software enthusiast and IT professional - originally from the USA, living and working in beautiful Budapest, Hungary. Did I mention that I&amp;rsquo;m passionate about Free Software?
 My actual degree is an Associate&amp;rsquo;s in Electronic Communications Technology (basically a radio technician) from Los Angeles Trade Technical College, but most of my work has been in IT, and over the years, that&amp;rsquo;s the area I feel most at home.
 💼 Some places I&amp;rsquo;ve worked&amp;hellip; Broadcast Exchange - Junior Partner
