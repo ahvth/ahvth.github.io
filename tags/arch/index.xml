@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>arch on ahvth.xyz</title>
+    <link>https://ahvth.github.io/tags/arch/</link>
+    <description>Recent content in arch on ahvth.xyz</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 07 Nov 2020 20:52:34 +0100</lastBuildDate><atom:link href="https://ahvth.github.io/tags/arch/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Arch Linux Demystified a.k.a. an Arch Linux Install Reference</title>
+      <link>https://ahvth.github.io/post/arch-install/</link>
+      <pubDate>Sat, 07 Nov 2020 20:52:34 +0100</pubDate>
+      
+      <guid>https://ahvth.github.io/post/arch-install/</guid>
+      <description>This is an iteration on an article I previously posted to medium.com
+ There are a lot of resources out there on installing Arch Linux, but when I first started with the subject, I always found it difficult to find that one guide with all of the commands spelled out for me with useful examples. So, haphazardly sprawling out on the page below me shall be a list of commands to create a conservative system layout in mostly chronological order. This should serve as a reference for new Arch users going through their first installations, or for experienced users who just need a quick checklist with some handy optimizations over the official guide.</description>
+    </item>
+    
+  </channel>
+</rss>
