@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.79.0-DEV" />
+
+
+
+
+
+
+<title>Getting Started with BTRFS Snapshotting - ahvth.xyz</title>
+
+
+
+<meta name="description" content="It&#39;s a blog." />
+
+
+<meta name="keywords" content="guide, brfs, backup, snapshotting" />
+
+<meta property="og:title" content="Getting Started with BTRFS Snapshotting" />
+<meta property="og:description" content="I&rsquo;ve been convinced for a while now that Fedora is the cleanest, most &ldquo;put together&rdquo; of the mainstream Linux distros. With the release of Fedora 33, I was finally persuaded to make the move from Arch Linux to Fedora on my main workstation, in no small part because I really wanted to see what the Fedora team was doing with BTRFS. Call me disappointed when I found out that all they had really done with BTRFS was set it as default and roll a somewhat uninspired subvolume layout, but we&rsquo;ll try to wrap our head around what we can do with the default setup." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ahvth.github.io/post/f33-btrfs-guide/" />
+<meta property="article:published_time" content="2020-11-08T19:46:59+01:00" />
+<meta property="article:modified_time" content="2020-11-08T19:46:59+01:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Getting Started with BTRFS Snapshotting"/>
+<meta name="twitter:description" content="I&rsquo;ve been convinced for a while now that Fedora is the cleanest, most &ldquo;put together&rdquo; of the mainstream Linux distros. With the release of Fedora 33, I was finally persuaded to make the move from Arch Linux to Fedora on my main workstation, in no small part because I really wanted to see what the Fedora team was doing with BTRFS. Call me disappointed when I found out that all they had really done with BTRFS was set it as default and roll a somewhat uninspired subvolume layout, but we&rsquo;ll try to wrap our head around what we can do with the default setup."/>
+
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+<link rel="stylesheet" href="https://ahvth.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+</head>
+
+<body data-theme="auto">
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://ahvth.github.io">ahvth.xyz</a>
+            
+            <span class="title-sub">It&#39;s just a blog.</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://ahvth.github.io/post/f33-btrfs-guide/">Getting Started with BTRFS Snapshotting</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2020-11-08</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1489 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/guide">guide</a>&nbsp;<a href="/tags/brfs">brfs</a>&nbsp;<a href="/tags/backup">backup</a>&nbsp;<a href="/tags/snapshotting">snapshotting</a>&nbsp;</span>
+
+    </div>
+    
+    
+    <div class="post-content markdown-body">
+        <p>I&rsquo;ve been convinced for a while now that Fedora is the cleanest, most &ldquo;put together&rdquo; of the mainstream Linux distros. With the release of Fedora 33, I was finally persuaded to make the move from Arch Linux to Fedora on my main workstation, in no small part because I really wanted to see what the Fedora team was doing with BTRFS. Call me disappointed when I found out that all they had really done with BTRFS was set it as default and roll a somewhat uninspired subvolume layout, but we&rsquo;ll try to wrap our head around what we can do with the default setup. Here&rsquo;s how the subvolumes look by default on Fedora:</p>
+<pre><code>~ $ sudo btrfs sub list /
+ID 256 gen 43073 top level 5 path home
+ID 257 gen 43073 top level 5 path root
+ID 265 gen 31079 top level 257 path var/lib/machines
+</code></pre>
+<p>Looking at fstab I can see that the first two subvolumes are set up exactly where I&rsquo;d expect them to be:</p>
+<pre><code>~ $ cat /etc/fstab
+UUID=765f6fff-7a69-4af8-97e8-9e0171283a69	/		btrfs	subvol=root			0 0
+UUID=44f6a310-41aa-4d2e-8a75-d1f02d92949b	/boot		ext4    defaults			1 2
+UUID=9FFB-450F					/boot/efi	vfat    umask=0077,shortname=winnt	0 2
+UUID=765f6fff-7a69-4af8-97e8-9e0171283a69	/home		btrfs   subvol=home			0 0
+</code></pre>
+<p>There wasn&rsquo;t really much documentation to go off on how they intended me to start using BTRFS for its advanced features, besides <a href="https://fedoramagazine.org/btrfs-snapshots-backup-incremental/" target="_blank">two</a> <a href="https://fedoramagazine.org/recover-your-files-from-btrfs-snapshots/" target="_blank">posts</a> in the Fedora magazine, which, while posing a serviceable solution, didn&rsquo;t really make the fullest use of the feature set of BTRFS.</p>
+<p>In the end, I decided to go off my previous experience with BTRFS and use the <code>snapper</code> tool from SUSE. So, from this point forward, we&rsquo;ll be looking at how we can use <code>snapper</code> to take automated incremental snapshots and restore from those on a live system <strong>instantly</strong>.</p>
+<h2 id="manual-snapshotting">Manual Snapshotting</h2>
+<p>First, we want to install <code>snapper</code>. Easy.</p>
+<pre><code>sudo dnf install snapper
+</code></pre>
+<p>Our first step out of the box will be to set up a &ldquo;config&rdquo; which really acts like a repository for snapshots. I will be setting up snapshotting for the <code>root</code> subvolume, as that&rsquo;s the area where I might need to revert changes (say, due to a borked update or major version upgrade - snapshotting root won&rsquo;t include the kernel, more on that later).</p>
+<pre><code>sudo snapper -c root create-config /
+</code></pre>
+<p>This will set up a config called <code>root</code> for the root directory. Note that because <code>/home</code> and <code>var/lib/machines</code> exist in separate subvolumes, they will be excluded from the snapshots. Handy! Now we know we can move our files into new subvolumes within our existing subvolumes to exclude those files from snapshots taken from the root of the &ldquo;parent&rdquo; subvolume.</p>
+<p>But, moving on, let&rsquo;s test out our new config to make sure everything works. I&rsquo;ll take a snapshot called &ldquo;base&rdquo; to get us started:</p>
+<pre><code>sudo snapper -c root create -d &quot;base&quot;
+</code></pre>
+<p>Now let&rsquo;s confirm it&rsquo;s creation:</p>
+<pre><code>~ $ sudo snapper -c root list
+  # | Type   | Pre # | Date                            | User | Used Space | Cleanup  | Description | Userdata
+----+--------+-------+---------------------------------+------+------------+----------+-------------+---------
+ 0  | single |       |                                 | root |            |          | current     |         
+ 1  | single |       | Sat 07 Nov 2020 12:14:50 AM CET | root | 468.00 KiB |          | base        |
+</code></pre>
+<p>There she blows! We can see that the first snapshot was successfully created. A short note - if <code>snapper list</code> takes a long time for you, that has been my experience with it as well, so don&rsquo;t be alarmed. Maybe we can fix this later.</p>
+<p>Now let&rsquo;s test a rollback to make sure everything works. Create a file in your root directory, in my case a directory called <code>/beacon</code> and take another snapshot:</p>
+<pre><code>sudo mkdir /beacon
+sudo snapper -c root create -d &quot;beacon&quot;
+</code></pre>
+<p>Check if the snapshot is there:</p>
+<pre><code>~ $ sudo snapper -c root list
+  # | Type   | Pre # | Date                            | User | Used Space | Cleanup  | Description | Userdata
+----+--------+-------+---------------------------------+------+------------+----------+-------------+---------
+ 0  | single |       |                                 | root |            |          | current     |         
+ 1  | single |       | Sat 07 Nov 2020 12:14:50 AM CET | root | 468.00 KiB |          | base        |         
+ 2  | single |       | Sat 07 Nov 2020 12:16:22 AM CET | root |   5.09 MiB |          | beacon      |
+</code></pre>
+<p>Nice! Now we can use snapper to get a list of what changed between the snapshots by referencing the id in the <code>#</code> column&hellip; really handy for finding out why you borked your system (with a little create use of <code>grep</code>)</p>
+<pre><code>~ $ sudo snapper -c root status 1..2
++..... /beacon
+c..... /var/lib/NetworkManager/timestamps
+c..... /var/log/audit/audit.log
+c..... /var/log/journal/1bdc1ee18ec74e4394197459cf787353/system.journal
+c..... /var/log/journal/1bdc1ee18ec74e4394197459cf787353/user-1000.journal
+c..... /var/log/snapper.log
+</code></pre>
+<p>We can see that <code>/beacon</code> was added, and there were some changes in my system logs, which is to be expected, naturally! Lets try a rollback&hellip;</p>
+<pre><code>sudo snapper -c root undochange 1..2
+</code></pre>
+<p>You should see that the root folder was reset to the state in the <code>base</code> snapshot, and the <code>/beacon</code> folder is now gone! You can roll back really complex changes in realtime while the filesystem is active, no problemo!</p>
+<h2 id="automating-snapshotting">Automating Snapshotting</h2>
+<p>Now that we know the basic commands to manage snapshots, let&rsquo;s set up an automated <code>timeline</code> snapshot. This is enabled by default in the config&rsquo;s configuration file, which will be located at <code>/etc/snapper/configs/root</code>. All we really need to do is turn on the associated systemd timer and set a snapshot retention policy that&rsquo;s sympathetic to us. I have some space to spare and I&rsquo;d like to have the freedom to make some bigger rollbacks (in case it takes me a while to realize there&rsquo;s an issue I need to rollback for), so I told snapper to retain 72 snapshots. We&rsquo;ll see over time if that&rsquo;s using too much space, but I find it unlikely, considering all the snapshots I&rsquo;ve seen so far are under 50MB and usually under 10MB. Here&rsquo;s the relevant section in <code>/etc/snapper/configs/root</code>:</p>
+<pre><code># cleanup hourly snapshots after some time
+TIMELINE_CLEANUP=&quot;yes&quot;
+
+# limits for timeline cleanup
+TIMELINE_MIN_AGE=&quot;1800&quot;
+TIMELINE_LIMIT_HOURLY=&quot;72&quot;
+TIMELINE_LIMIT_DAILY=&quot;10&quot;
+TIMELINE_LIMIT_WEEKLY=&quot;0&quot;
+TIMELINE_LIMIT_MONTHLY=&quot;10&quot;
+TIMELINE_LIMIT_YEARLY=&quot;10&quot;
+</code></pre>
+<p>All that&rsquo;s left at this point is to activate the systemd timer:</p>
+<pre><code>sudo systemctl enable snapper-timeline.timer
+sudo systemctl start snapper-timeline.timer
+</code></pre>
+<p>Check that the timer is active:</p>
+<pre><code>~ $ sudo systemctl status snapper-timeline.service
+● snapper-timeline.service - Timeline of Snapper Snapshots
+     Loaded: loaded (/usr/lib/systemd/system/snapper-timeline.service; static)
+     Active: inactive (dead) since Sun 2020-11-08 20:00:02 CET; 40min ago
+TriggeredBy: ● snapper-timeline.timer
+       Docs: man:snapper(8)
+             man:snapper-configs(5)
+    Process: 215148 ExecStart=/usr/libexec/snapper/systemd-helper --timeline (code=exited, status=0/SUCCESS)
+   Main PID: 215148 (code=exited, status=0/SUCCESS)
+        CPU: 6ms
+
+Nov 08 20:00:01 onyx systemd[1]: Started Timeline of Snapper Snapshots.
+Nov 08 20:00:01 onyx systemd-helper[215148]: running timeline for 'root'.
+Nov 08 20:00:02 onyx systemd[1]: snapper-timeline.service: Succeeded.
+</code></pre>
+<p>If we wait a couple hours, we should see that our <code>snapper -c root list</code> table is filling up with timeline snapshots!</p>
+<pre><code>~ $ sudo snapper -c root list
+  # | Type   | Pre # | Date                            | User | Used Space | Cleanup  | Description | Userdata
+----+--------+-------+---------------------------------+------+------------+----------+-------------+---------
+ 0  | single |       |                                 | root |            |          | current     |         
+ 1  | single |       | Sat 07 Nov 2020 12:14:50 AM CET | root | 468.00 KiB |          | base        |         
+ 2  | single |       | Sat 07 Nov 2020 12:16:22 AM CET | root |   5.09 MiB |          | beacon      |         
+ 3  | single |       | Sat 07 Nov 2020 12:22:02 AM CET | root |  30.85 MiB |          | rm geary    |         
+ 4  | single |       | Sat 07 Nov 2020 01:00:23 PM CET | root |   7.29 MiB | timeline | timeline    |         
+ 5  | single |       | Sat 07 Nov 2020 02:00:23 PM CET | root | 972.00 KiB | timeline | timeline    |         
+ 6  | single |       | Sat 07 Nov 2020 03:00:23 PM CET | root |   8.73 MiB | timeline | timeline    |         
+ 7  | single |       | Sat 07 Nov 2020 04:00:23 PM CET | root |   7.51 MiB | timeline | timeline    |         
+ 8  | single |       | Sat 07 Nov 2020 05:00:23 PM CET | root |   8.40 MiB | timeline | timeline    |         
+ 9  | single |       | Sat 07 Nov 2020 06:00:23 PM CET | root |  83.77 MiB | timeline | timeline    |         
+10  | single |       | Sat 07 Nov 2020 07:00:23 PM CET | root |   1.59 MiB | timeline | timeline    |         
+11  | single |       | Sat 07 Nov 2020 08:00:23 PM CET | root | 956.00 KiB | timeline | timeline    |         
+12  | single |       | Sat 07 Nov 2020 09:00:23 PM CET | root |   7.96 MiB | timeline | timeline    |         
+13  | single |       | Sat 07 Nov 2020 10:00:23 PM CET | root | 516.00 KiB | timeline | timeline    |
+</code></pre>
+<p>And that&rsquo;s it!</p>
+<p>I mentioned before that we don&rsquo;t capture the kernel in these snapshots. So for the best results, if you roll back to a period with a previous kernel, it&rsquo;s probably best (for consistency reasons, if nothing else), to roll back the kernel by booting the previous kernel in GRUB before you roll back the system.</p>
+<p>Happy snapshotting!</p>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://linkedin.com/in/ahvth" target="_blank"><span>LinkedIn</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/arch/">arch</a>
+            </span>
+            
+            <span>
+                <a href="/tags/backup/">backup</a>
+            </span>
+            
+            <span>
+                <a href="/tags/brfs/">brfs</a>
+            </span>
+            
+            <span>
+                <a href="/tags/guide/">guide</a>
+            </span>
+            
+            <span>
+                <a href="/tags/snapshotting/">snapshotting</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#manual-snapshotting">Manual Snapshotting</a></li>
+    <li><a href="#automating-snapshotting">Automating Snapshotting</a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+</aside>
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://linkedin.com/in/ahvth" target="_blank"><span>LinkedIn</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/arch/">arch</a>
+            </span>
+            
+            <span>
+                <a href="/tags/backup/">backup</a>
+            </span>
+            
+            <span>
+                <a href="/tags/brfs/">brfs</a>
+            </span>
+            
+            <span>
+                <a href="/tags/guide/">guide</a>
+            </span>
+            
+            <span>
+                <a href="/tags/snapshotting/">snapshotting</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#manual-snapshotting">Manual Snapshotting</a></li>
+    <li><a href="#automating-snapshotting">Automating Snapshotting</a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span id="footer-copy">&#127279; 2020
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/combine/npm/medium-zoom@1.0.6,npm/lazysizes@5.2.2"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+</body>
+
+</html>

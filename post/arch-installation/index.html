@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.79.0-DEV" />
+
+
+
+
+
+
+<title>Arch Linux Demystified a.k.a. an Arch Linux Install Reference - ahvth.xyz</title>
+
+
+
+<meta name="description" content="It&#39;s a blog." />
+
+
+<meta name="keywords" content="arch, guide" />
+
+<meta property="og:title" content="Arch Linux Demystified a.k.a. an Arch Linux Install Reference" />
+<meta property="og:description" content="This is an iteration on an article I previously posted to medium.com
+ There are a lot of resources out there on installing Arch Linux, but when I first started with the subject, I always found it difficult to find that one guide with all of the commands spelled out for me with useful examples. So, haphazardly sprawling out on the page below me shall be a list of commands to create a conservative system layout in mostly chronological order. This should serve as a reference for new Arch users going through their first installations, or for experienced users who just need a quick checklist with some handy optimizations over the official guide." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ahvth.github.io/post/arch-installation/" />
+<meta property="article:published_time" content="2020-11-07T20:52:34+01:00" />
+<meta property="article:modified_time" content="2020-11-07T20:52:34+01:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Arch Linux Demystified a.k.a. an Arch Linux Install Reference"/>
+<meta name="twitter:description" content="This is an iteration on an article I previously posted to medium.com
+ There are a lot of resources out there on installing Arch Linux, but when I first started with the subject, I always found it difficult to find that one guide with all of the commands spelled out for me with useful examples. So, haphazardly sprawling out on the page below me shall be a list of commands to create a conservative system layout in mostly chronological order. This should serve as a reference for new Arch users going through their first installations, or for experienced users who just need a quick checklist with some handy optimizations over the official guide."/>
+
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+<link rel="stylesheet" href="https://ahvth.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+</head>
+
+<body data-theme="auto">
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://ahvth.github.io">ahvth.xyz</a>
+            
+            <span class="title-sub">It&#39;s just a blog.</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://ahvth.github.io/post/arch-installation/">Arch Linux Demystified a.k.a. an Arch Linux Install Reference</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2020-11-07</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1037 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/arch">arch</a>&nbsp;<a href="/tags/guide">guide</a>&nbsp;</span>
+
+    </div>
+    
+    
+    <div class="post-content markdown-body">
+        <blockquote>
+<p>This is an iteration on an <a href="https://medium.com/@ahvth/arch-linux-installation-demystified-a-k-a-an-arch-linux-reference-efad34a732c6" target="_blank">article</a> I previously posted to medium.com</p>
+</blockquote>
+<p>There are a lot of resources out there on installing Arch Linux, but when I first started with the subject, I always found it difficult to find that one guide with all of the commands spelled out for me with useful examples. So, haphazardly sprawling out on the page below me shall be a list of commands to create a conservative system layout in mostly chronological order. This should serve as a reference for new Arch users going through their first installations, or for experienced users who just need a quick checklist with some handy optimizations over the official guide.</p>
+<p><a href="https://wiki.archlinux.org/index.php/Installation_guide" target="_blank">Read the official installation guide</a><br>
+<a href="https://www.archlinux.org/download/" target="_blank">Get Arch</a></p>
+<h2 id="chapter-1-the-liveusb">Chapter 1: The LiveUSB</h2>
+<p><strong>Installer version used at the time of this article’s creation</strong>: <code>ARCH_202003</code></p>
+<p><em>The first steps of any Arch installation happen on the Arch LiveUSB</em></p>
+<h3 id="keyboard">Keyboard</h3>
+<h4 id="querying-available-keyboard-layouts">Querying available keyboard layouts</h4>
+<pre><code>find /usr/share/kbd/keymaps/ -type f | more
+</code></pre>
+<h4 id="configuring-the-keyboard">Configuring the keyboard</h4>
+<pre><code>loadkeys hu
+</code></pre>
+<h3 id="uefi--bios">UEFI / BIOS</h3>
+<p>Querying BIOS or UEFI</p>
+<pre><code>ls /sys/firmware/efi/efivars
+</code></pre>
+<p>OR</p>
+<pre><code>efivar -l
+</code></pre>
+<blockquote>
+<p>If the queries above do not return anything, then the system is running in BIOS (Legacy) mode. If a list is returned, the available UEFI functions will be listed</p>
+</blockquote>
+<h3 id="internet">Internet</h3>
+<h4 id="verifying-the-internet-connection">Verifying the internet connection</h4>
+<pre><code>ping -c 4 archlinux.org
+ifconfig
+</code></pre>
+<h3 id="time-and-date">Time and Date</h3>
+<h4 id="setting-time-and-date">Setting time and date</h4>
+<pre><code>timedatectl set-ntp true
+</code></pre>
+<h3 id="disks">Disks</h3>
+<h4 id="querying-disks">Querying disks</h4>
+<pre><code>fdisk -l
+</code></pre>
+<h4 id="disk-table-creation-or-modification">Disk table creation or modification</h4>
+<p>Find your block device ID:</p>
+<pre><code>lsblk
+</code></pre>
+<blockquote>
+<p>Note: block devices aren&rsquo;t all labeled /dev/sda as in the examples below (these are SATA devices). Other block device naming schemes exist such as nvme0pX, where the last character is the partition number.</p>
+</blockquote>
+<pre><code>parted /dev/sda
+mklabel MSDOS
+
+# or
+
+mklabel gpt
+</code></pre>
+<h4 id="partitioning">Partitioning</h4>
+<pre><code>cfdisk /dev/sda
+</code></pre>
+<p><em>// This will open the <code>cfdisk</code> ncurses disk utility</em></p>
+<p><em>// Example system configuration:</em></p>
+<blockquote>
+<p>Do not copy unless you know the settings are correct for your desired layout.</p>
+</blockquote>
+<p><code>--&gt; [ dos ]</code> <em>// If no option is presented, clear the current partition table with: <code>wipefs -a /dev/sda</code> OR <code>parted</code></em></p>
+<p><code>--&gt; [ new ]</code> <em>// Create an EFI parition, if working in EFI mode (Type: <code>EFI F32</code>)</em></p>
+<p><code>--&gt; [ new ]</code> <em>// Create a system partition (Type: <code>Linux ext4</code>)</em></p>
+<p><code>--&gt; [ bootable ]</code> <em>// BOOT-flag (for BIOS / Legacy systems)</em></p>
+<p><code>--&gt; [ new ]</code> <em>// Create a /home partition (Type: <code>Linux ext4</code>)</em></p>
+<p><code>--&gt; [ new ]</code> <em>// Create a swap partition if desired (Type: <code>Linux swap</code>)</em></p>
+<p><code>--&gt; [ write ]</code> <em>// Write changes to disk</em></p>
+<p><code>--&gt; [ quit ]</code> <em>// Exit</em></p>
+<h4 id="create-or-format-a-filesystem">Create or format a filesystem</h4>
+<blockquote>
+<p>/dev/sdaX represents the partition number of the corresponding partition you just created, such as /dev/sda1</p>
+</blockquote>
+<p><em>// Default filesystem for EFI partitions is FAT32</em></p>
+<pre><code>mkfs.vfat /dev/sdaX
+</code></pre>
+<p>System partition</p>
+<p><em>// Default filesystem for the system partition is ext4</em></p>
+<pre><code>mkfs.ext4 /dev/sdaX
+</code></pre>
+<p>Swap partition</p>
+<p><em>// Formatting the swap partition</em></p>
+<pre><code>mkswap /dev/sdaX
+</code></pre>
+<p><em>// Activating the swap partition</em></p>
+<pre><code>swapon /dev/sdaX
+</code></pre>
+<h4 id="mounting-partitions">Mounting partitions</h4>
+<p><em>// The system partition is where the root filesystem will be located</em></p>
+<pre><code>mount /dev/sdaX /mnt
+</code></pre>
+<p><em>// If you have chosen to use a separate partition for your home folder, then create a mount point for that partition</em></p>
+<pre><code>mkdir /mnt/home
+</code></pre>
+<p><em>// The home partition will be where the /home folder is located</em></p>
+<pre><code>mount /dev/sdaX /mnt/home
+</code></pre>
+<h3 id="mirrors-and-base-system-install">Mirrors and base system install</h3>
+<h4 id="configuring-pacman-mirrorlist">Configuring pacman mirrorlist</h4>
+<pre><code>vim /etc/pacman.d/mirrorlist
+</code></pre>
+<p><em>// The best strategy is to place the closest server to you by geo-location to the top of the list</em></p>
+<h4 id="reflector">Reflector</h4>
+<p>Alternatively, the <code>reflector</code> tool can be used to automatically sort mirrors according to various sorting methods.</p>
+<p><em>// reflector must be installed separately as it is not included in the LiveUSB image</em></p>
+<pre><code>pacman -S reflector
+</code></pre>
+<p><em>// The following example command will select the fastest mirror in a given country (using Hungary as an example)</em></p>
+<pre><code>reflector --country Hungary --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+</code></pre>
+<p>Usage information <a href="https://wiki.archlinux.org/index.php/Reflector" target="_blank">here</a>.</p>
+<h4 id="installing-the-base-system">Installing the base system</h4>
+<pre><code>pacstrap /mnt base base-devel linux linux-firmware
+</code></pre>
+<blockquote>
+<p>To solve hardware compatibility or stability issues resulting from the mainline kernel, use the <code>linux-lts</code> package</p>
+</blockquote>
+<h2 id="chapter-2---the-chroot-environment">Chapter 2 - The <code>chroot</code> Environment</h2>
+<p>Prepare to change from the LiveUSB to the destination filesystem.</p>
+<p><em>// Generate the fstab for the destination filesystem</em></p>
+<pre><code>genfstab -U /mnt &gt;&gt; /mnt/etc/fstab
+</code></pre>
+<p><em>// Change over to the destination filesystem</em></p>
+<pre><code>arch-chroot /mnt
+</code></pre>
+<h3 id="locale-and-hostname">Locale and Hostname</h3>
+<h4 id="timezone">Timezone</h4>
+<pre><code>ln -sf /usr/share/zoneinfo/Europe/Budapest /etc/localtime
+</code></pre>
+<h4 id="system-time">System time</h4>
+<pre><code>hwclock --systohc
+</code></pre>
+<h4 id="character-encoding">Character encoding</h4>
+<pre><code>vim /etc/locale.gen
+</code></pre>
+<p><em>// Uncomment your desired locale&rsquo;s encoding option</em></p>
+<pre><code>locale-gen
+</code></pre>
+<p><em>// Optionally, depending on desired desktop environment (add with your desired locale to <code>/etc/locale.conf</code>)</em></p>
+<pre><code>LANG=hu_HU.UTF-8
+LC_ADDRESS=hu_HU.UTF-8
+LC_COLLATE=hu_HU.UTF-8
+LC_CTYPE=hu_HU.UTF-8
+LC_IDENTIFICATION=hu_HU.UTF-8
+LC_MEASUREMENT=hu_HU.UTF-8
+LC_MESSAGES=hu_HU.UTF-8
+LC_MONETARY=hu_HU.UTF-8
+LC_NAME=hu_HU.UTF-8
+LC_NUMERIC=hu_HU.UTF-8
+LC_PAPER=hu_HU.UTF-8
+LC_TELEPHONE=hu_HU.UTF-8
+LC_TIME=hu_HU.UTF-8
+</code></pre>
+<h4 id="keyboard-layout">Keyboard layout</h4>
+<p><em>// Use your desired keyboard layout</em></p>
+<pre><code>echo &quot;KEYMAP=hu &gt; /etc/vconsole.conf&quot;
+</code></pre>
+<h4 id="hostname">Hostname</h4>
+<p><em>// Use your desired hostname here</em></p>
+<pre><code>echo HOSTNAME &gt; /etc/hostname
+</code></pre>
+<h3 id="users">Users</h3>
+<p><em>// Generate root user password</em></p>
+<pre><code>passwd
+</code></pre>
+<p><em>// Add your user (-m modifier creates a home folder for the user)</em></p>
+<pre><code>useradd -mg wheel exampleuser
+</code></pre>
+<p><em>// Assign a password to user</em></p>
+<pre><code>passwd exampleuser
+</code></pre>
+<p><em>// To enable use of <code>sudo</code>, uncomment the following line in <code>/etc/sudoers</code></em></p>
+<pre><code>vim /etc/sudoers
+</code></pre>
+<p><em>// Uncomment</em></p>
+<pre><code>%wheel ALL=(ALL) ALL
+</code></pre>
+<h3 id="packages">Packages</h3>
+<h4 id="xorg">X.org</h4>
+<pre><code>pacman -S dialog xorg xorg-xinit xorg-xauth xterm
+</code></pre>
+<h4 id="grub">GRUB</h4>
+<blockquote>
+<p>Skip to the next section if using GRUB with UEFI</p>
+</blockquote>
+<blockquote>
+<p>Again, replace <code>/dev/sda</code> with the target block device you used above.</p>
+</blockquote>
+<pre><code>pacman -S grub
+grub-mkconfig -o /boot/grub/grub.cfg
+grub-install /dev/sda
+</code></pre>
+<h4 id="grub--uefi">GRUB + UEFI</h4>
+<p><em>// UEFI boot requires both <code>grub</code> and <code>efibootmgr</code></em></p>
+<pre><code>pacman -S grub efibootmgr
+</code></pre>
+<p><em>// If this command returns the error <code>cannot find EFI directory</code>, you didn&rsquo;t create your EFI partition correctly.</em></p>
+<blockquote>
+<p><code>/dev/sdaX is the efi partition you created in Chapter 1</code></p>
+</blockquote>
+<pre><code>mkdir /efi
+mount /dev/sdaX /efi
+</code></pre>
+<p><em>// Install GRUB</em></p>
+<blockquote>
+<p>You can use whatever value you like in as the <code>bootloader-id</code>. This will be the name of the UEFI entry created for Arch.</p>
+</blockquote>
+<pre><code>grub-install --target=x86_64-efi --efi-directory=efi --bootloader-id=ARCH
+grub-mkconfig -o /boot/grub/grub.cfg
+</code></pre>
+<h3 id="graphical-environments">Graphical environments</h3>
+<p><em>// Some examples:</em></p>
+<pre><code>pacman -S gnome
+pacman -S lightdm lxde-gtk3
+pacman -S lightdm mate
+pacman -S lxdm i3-wm
+</code></pre>
+<h4 id="display-manager-initialization">Display manager initialization</h4>
+<h5 id="gnome">GNOME</h5>
+<p><em>// If you are using GNOME</em></p>
+<pre><code>systemctl enable gdm
+</code></pre>
+<h5 id="lxde-mate">LXDE, MATE</h5>
+<p><em>// If you are using LXDE or MATE</em></p>
+<pre><code>systemctl enable lightdm
+</code></pre>
+<h5 id="i3">i3</h5>
+<p><em>// A simple graphical login for i3wm is LXDM</em></p>
+<pre><code>systemctl enable lxdm
+</code></pre>
+<h4 id="initializing-the-network-daemon">Initializing the network daemon</h4>
+<blockquote>
+<p>Some DE packages may not include a network manager, NetworkManager is recommended</p>
+</blockquote>
+<pre><code>pacman -S networkmanager
+systemctl enable NetworkManager.service
+</code></pre>
+<h4 id="reboot">Reboot</h4>
+<p>The final step is to exit chroot reboot into your freshly installed Arch installation:</p>
+<pre><code>exit
+reboot
+</code></pre>
+<p>Congratulations and enjoy your new Arch system!</p>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://linkedin.com/in/ahvth" target="_blank"><span>LinkedIn</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/arch/">arch</a>
+            </span>
+            
+            <span>
+                <a href="/tags/backup/">backup</a>
+            </span>
+            
+            <span>
+                <a href="/tags/brfs/">brfs</a>
+            </span>
+            
+            <span>
+                <a href="/tags/guide/">guide</a>
+            </span>
+            
+            <span>
+                <a href="/tags/snapshotting/">snapshotting</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#chapter-1-the-liveusb">Chapter 1: The LiveUSB</a>
+      <ul>
+        <li><a href="#keyboard">Keyboard</a></li>
+        <li><a href="#uefi--bios">UEFI / BIOS</a></li>
+        <li><a href="#internet">Internet</a></li>
+        <li><a href="#time-and-date">Time and Date</a></li>
+        <li><a href="#disks">Disks</a></li>
+        <li><a href="#mirrors-and-base-system-install">Mirrors and base system install</a></li>
+      </ul>
+    </li>
+    <li><a href="#chapter-2---the-chroot-environment">Chapter 2 - The <code>chroot</code> Environment</a>
+      <ul>
+        <li><a href="#locale-and-hostname">Locale and Hostname</a></li>
+        <li><a href="#users">Users</a></li>
+        <li><a href="#packages">Packages</a></li>
+        <li><a href="#graphical-environments">Graphical environments</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+    
+    
+</aside>
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://linkedin.com/in/ahvth" target="_blank"><span>LinkedIn</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/arch/">arch</a>
+            </span>
+            
+            <span>
+                <a href="/tags/backup/">backup</a>
+            </span>
+            
+            <span>
+                <a href="/tags/brfs/">brfs</a>
+            </span>
+            
+            <span>
+                <a href="/tags/guide/">guide</a>
+            </span>
+            
+            <span>
+                <a href="/tags/snapshotting/">snapshotting</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>TOC</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#chapter-1-the-liveusb">Chapter 1: The LiveUSB</a>
+      <ul>
+        <li><a href="#keyboard">Keyboard</a></li>
+        <li><a href="#uefi--bios">UEFI / BIOS</a></li>
+        <li><a href="#internet">Internet</a></li>
+        <li><a href="#time-and-date">Time and Date</a></li>
+        <li><a href="#disks">Disks</a></li>
+        <li><a href="#mirrors-and-base-system-install">Mirrors and base system install</a></li>
+      </ul>
+    </li>
+    <li><a href="#chapter-2---the-chroot-environment">Chapter 2 - The <code>chroot</code> Environment</a>
+      <ul>
+        <li><a href="#locale-and-hostname">Locale and Hostname</a></li>
+        <li><a href="#users">Users</a></li>
+        <li><a href="#packages">Packages</a></li>
+        <li><a href="#graphical-environments">Graphical environments</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span id="footer-copy">&#127279; 2020
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/combine/npm/medium-zoom@1.0.6,npm/lazysizes@5.2.2"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.21.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+</body>
+
+</html>
