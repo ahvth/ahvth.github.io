@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>btrfs on ahvth.xyz</title>
+    <link>https://ahvth.xyz/tags/btrfs/</link>
+    <description>Recent content in btrfs on ahvth.xyz</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 08 Nov 2020 19:46:59 +0100</lastBuildDate><atom:link href="https://ahvth.xyz/tags/btrfs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Getting Started with BTRFS Snapshots in Fedora 33</title>
+      <link>https://ahvth.xyz/post/f33-btrfs-guide/</link>
+      <pubDate>Sun, 08 Nov 2020 19:46:59 +0100</pubDate>
+      
+      <guid>https://ahvth.xyz/post/f33-btrfs-guide/</guid>
+      <description>I&amp;rsquo;ve been convinced for a while now that Fedora is the cleanest, most &amp;ldquo;put together&amp;rdquo; of the mainstream Linux distros. With the release of Fedora 33, I was finally persuaded to make the move from Arch Linux to Fedora on my main workstation, in no small part because I really wanted to see what the Fedora team was doing with BTRFS. Call me disappointed when I found out that all they had really done with BTRFS was set it as default and roll a somewhat uninspired subvolume layout, but we&amp;rsquo;ll try to wrap our head around what we can do with the default setup.</description>
+    </item>
+    
+  </channel>
+</rss>
