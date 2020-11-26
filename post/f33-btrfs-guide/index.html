@@ -97,7 +97,7 @@
         <a href="https://ahvth.xyz/post/f33-btrfs-guide/">Getting Started with BTRFS Snapshots in Fedora 33</a>
     </h2>
     <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2020-11-08</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1454 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/guide">guide</a>&nbsp;<a href="/tags/btrfs">btrfs</a>&nbsp;<a href="/tags/backup">backup</a>&nbsp;<a href="/tags/snapshotting">snapshotting</a>&nbsp;</span>
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2020-11-08</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1468 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/guide">guide</a>&nbsp;<a href="/tags/btrfs">btrfs</a>&nbsp;<a href="/tags/backup">backup</a>&nbsp;<a href="/tags/snapshotting">snapshotting</a>&nbsp;</span>
 
     </div>
     
@@ -162,6 +162,9 @@ c..... /var/log/snapper.log
 <pre><code>sudo snapper -c root undochange 1..2
 </code></pre>
 <p>You should see that the root folder was reset to the state in the <code>base</code> snapshot, and the <code>/beacon</code> folder is now gone! You can roll back really complex changes in realtime while the filesystem is active, but it&rsquo;s probably best to ignore directories that you know are in frequent motion to avoid data inconsistency issues, as BTRFS doesn&rsquo;t do any data consistency checks on snapshotting. One way to do that would be to put those directories in separate subvolumes to avoid them being captured in a snapshot of their parent subvolume.</p>
+<blockquote>
+<p>To do: investigate implementing snapper / grub implementation on Fedora for more reliable rollbacks!</p>
+</blockquote>
 <h2 id="automating-snapshotting">Automating Snapshotting</h2>
 <p>Now that we know the basic commands to manage snapshots, let&rsquo;s set up an automated <code>timeline</code> snapshot. This is enabled by default in the config&rsquo;s configuration file, which will be located at <code>/etc/snapper/configs/root</code>. All we really need to do is turn on the associated systemd timer and set a snapshot retention policy that&rsquo;s sympathetic to us. I have some space to spare and I&rsquo;d like to have the freedom to make some bigger rollbacks (in case it takes me a while to realize there&rsquo;s an issue I need to rollback for), so I told snapper to retain 12 daily snapshots. Here&rsquo;s the relevant section in <code>/etc/snapper/configs/root</code>:</p>
 <pre><code># cleanup hourly snapshots after some time
