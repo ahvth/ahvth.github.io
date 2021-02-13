@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta http-equiv="Cache-Control" content="no-transform" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
-<meta name="generator" content="Hugo 0.79.0-DEV" />
+<meta name="generator" content="Hugo 0.80.0" />
 
 
 
@@ -99,7 +99,7 @@
         <a href="https://ahvth.xyz/post/arch-installation/">Arch Linux Demystified a.k.a. an Arch Linux Install Reference</a>
     </h2>
     <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2020-11-07</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1037 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/arch">arch</a>&nbsp;<a href="/tags/guide">guide</a>&nbsp;</span>
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2020-11-07</span><span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1061 words</span><span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/arch">arch</a>&nbsp;<a href="/tags/guide">guide</a>&nbsp;</span>
 
     </div>
     
@@ -335,12 +335,17 @@ pacman -S lxdm i3-wm
 <p><em>// A simple graphical login for i3wm is LXDM</em></p>
 <pre><code>systemctl enable lxdm
 </code></pre>
-<h4 id="initializing-the-network-daemon">Initializing the network daemon</h4>
+<h4 id="initializing-network-services">Initializing network services</h4>
 <blockquote>
 <p>Some DE packages may not include a network manager, NetworkManager is recommended</p>
 </blockquote>
 <pre><code>pacman -S networkmanager
 systemctl enable NetworkManager.service
+</code></pre>
+<blockquote>
+<p>Arch has recently migrated to using <code>systemd-resolved</code> for DNS resolution. This systemd service must be manually enabled as part of the installation.</p>
+</blockquote>
+<pre><code>systemctl enable systemd-resolved
 </code></pre>
 <h4 id="reboot">Reboot</h4>
 <p>The final step is to exit chroot reboot into your freshly installed Arch installation:</p>
